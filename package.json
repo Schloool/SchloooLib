@@ -1,0 +1,12 @@
+{
+  "name": "de.schloool.schlooolib",
+  "version": "0.0.1",
+  "displayName": "SchloooLib",
+  "description": "Script library containing numerous utilities.",
+  "unity": "2019.1",
+  "author": {
+    "name": "Schloool",
+    "email": "schloool.dev@gmail.com",
+    "url": "https://www.schloool.de"
+  }
+}
