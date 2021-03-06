@@ -1,0 +1,61 @@
+name: CI
+#on:
+#  pull_request: {}
+#  push: { branches: [master] }
+
+on: 
+  push:
+    paths-ignore:
+      - 'doc/**'
+      - '*.md'
+      
+jobs:
+  CI:
+    name: Test
+    runs-on: ubuntu-latest
+    env:
+      UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+    steps:
+  
+      # Checkout repository (required to test local actions)
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+        
+      - name: Cache Library
+        id: cache-library
+        uses: actions/cache@v2
+        with:
+          path: Library
+          key: Library
+          
+      - name: Activate license
+        uses: MirageNet/unity-runner@3.1.0
+        with:
+          entrypoint: /activate.sh
+          
+      - name: Generate Solution
+        uses: MirageNet/unity-runner@3.1.0
+        with:
+          # Arguments to pass to unity
+          args: -buildTarget StandaloneWindows64 -customBuildName Mirage -customBuildPath ./build/StandaloneWindows64 -projectPath . -executeMethod  UnityEditor.SyncVS.SyncSolution -quit
+  
+      # Configure test runner
+      - name: Run editor Tests
+        uses: MirageNet/unity-runner@3.1.0
+        with:
+          args: -runTests -testPlatform editmode -testResults Tests/editmode-results.xml -enableCodeCoverage -coverageResultsPath Tests
+
+      - name: Run play Tests
+        uses: MirageNet/unity-runner@3.1.0
+        with:
+          args: -runTests -testPlatform playmode -testResults Tests/playmode-results.xml -enableCodeCoverage -coverageResultsPath Tests
+          
+      # Upload artifacts
+      - name: Archive test results
+        uses: actions/upload-artifact@v1
+        if: always()
+        with:
+          name: Test results
+          path: Tests
