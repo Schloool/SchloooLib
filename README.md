@@ -1,3 +1,5 @@
+[![CI](https://github.com/Schloool/SchloooLib/actions/workflows/main.yml/badge.svg)](https://github.com/Schloool/SchloooLib/actions/workflows/main.yml)
+
 # SchloooLib
 SchloooLib is an easy-to-use C# library for Unity Game Engine offering lots of utilities.
 
