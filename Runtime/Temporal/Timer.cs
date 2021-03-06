@@ -71,7 +71,7 @@ namespace SchloooLib.Temporal
             return UsesGameTimescale ? Time.time : Time.realtimeSinceStartup;
         }
 
-        private float GetTimeSinceTimerStart()
+        public float GetTimeSinceTimerStart()
         {
             if (IsFinished || GetGlobalTime() >= GetFinishTime()) return Duration;
             
