@@ -1,13 +1,7 @@
 name: CI
-#on:
-#  pull_request: {}
-#  push: { branches: [master] }
-
-on: 
-  push:
-    paths-ignore:
-      - 'doc/**'
-      - '*.md'
+on:
+  pull_request: {}
+  push: { branches: [master] }
       
 jobs:
   CI:
