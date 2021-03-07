@@ -3,7 +3,7 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "Runtime"
+        "Unity.SchloooLib"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
