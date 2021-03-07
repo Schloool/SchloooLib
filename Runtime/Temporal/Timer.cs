@@ -18,9 +18,14 @@ namespace SchloooLib.Temporal
         
         private float? elapsedTimeBeforePause;
 
-        public static Timer Schedule(float duration, Action onFinish, Action<float> onTick = null, bool isLooping = false, bool usesGameTimescale = false, bool runInstantly = true)
+        public static Timer ScheduleLoop(float delayPerIteration, Action onIterationFinish, Action<float> onTick = null, bool usesGameTimescale = false, bool runInstantly = true)
         {
-            return new Timer(duration, onFinish, onTick, isLooping, usesGameTimescale, runInstantly);
+            return new Timer(delayPerIteration, onIterationFinish, onTick, true, usesGameTimescale, runInstantly);
+        }
+        
+        public static Timer ScheduleDelay(float delayDuration, Action onFinish, Action<float> onTick = null, bool usesGameTimescale = false, bool runInstantly = true)
+        {
+            return new Timer(delayDuration, onFinish, onTick, false, usesGameTimescale, runInstantly);
         }
 
         protected Timer(float duration, Action onFinish, Action<float> onTick = null, bool isLooping = false, bool usesGameTimescale = false, bool runInstantly = true)
