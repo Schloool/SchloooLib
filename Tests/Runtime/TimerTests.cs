@@ -9,109 +9,120 @@ namespace SchloooLib.Tests
     public class TimerTests
     {
         [UnityTest]
-        public IEnumerator Delay_Timer_Gets_Marked_As_Finished()
+        public IEnumerator Delay_Gets_Marked_As_Finished()
         {
-            Timer timer = Timer.ScheduleDelay(1f, null);
+            Delay delay = Delay.ScheduleDelay(1f, null);
             yield return new WaitForSeconds(1f);
             
-            Assert.IsTrue(timer.IsFinished);
+            Assert.IsTrue(delay.IsFinished);
         }
         
         [UnityTest]
-        public IEnumerator Delay_Timer_Is_Not_Marked_As_Finished_Early()
+        public IEnumerator Delay_Is_Not_Marked_As_Finished_Early()
         {
-            Timer timer = Timer.ScheduleDelay(10f, null);
+            Delay delay = Delay.ScheduleDelay(10f, null);
             yield return new WaitForSeconds(1f);
             
-            Assert.IsFalse(timer.IsFinished);
-            timer.Stop();
+            Assert.IsFalse(delay.IsFinished);
+            delay.Stop();
         }
-        
-        [UnityTest]
-        public IEnumerator Looping_Timer_Is_Not_Marked_As_Finished()
-        {
-            Timer timer = Timer.ScheduleLoop(1f, null);
-            yield return new WaitForSeconds(2f);
-            
-            Assert.IsFalse(timer.IsFinished);
-            timer.Stop();
-        }
-        
+
         [UnityTest]
         public IEnumerator Timescale_Effects_Scaled_Timer()
         {
-            Timer timer = Timer.ScheduleDelay(1.5f, null, usesGameTimescale: true, runInstantly: false);
+            Delay delay = Delay.ScheduleDelay(1.5f, null, usesGameTimescale: true, runInstantly: false);
             Time.timeScale = 0.5f;
             yield return null;
-            timer.Unpause();
+            delay.Unpause();
             
             yield return new WaitForSecondsRealtime(2f);
             
-            Assert.IsFalse(timer.IsFinished);
-            timer.Stop();
+            Assert.IsFalse(delay.IsFinished);
+            delay.Stop();
             Time.timeScale = 1f;
         }
         
         [UnityTest]
         public IEnumerator Timescale_Does_Not_Effect_Unscaled_Timer()
         {
-            Timer timer = Timer.ScheduleDelay(1.5f, null, runInstantly: false);
+            Delay delay = Delay.ScheduleDelay(1.5f, null, runInstantly: false);
             Time.timeScale = 0.5f;
             yield return null;
-            timer.Unpause();
+            delay.Unpause();
             
             yield return new WaitForSecondsRealtime(2f);
-            Assert.IsTrue(timer.IsFinished);
+            Assert.IsTrue(delay.IsFinished);
             Time.timeScale = 1f;
         }
 
         [UnityTest]
         public IEnumerator Start_Pause_Gets_Set()
         {
-            Timer timer = Timer.ScheduleDelay(10f, null, runInstantly: false);
+            Delay delay = Delay.ScheduleDelay(10f, null, runInstantly: false);
             yield return null;
 
-            Assert.IsTrue(timer.IsPaused);
-            Assert.IsFalse(timer.IsFinished);
+            Assert.IsTrue(delay.IsPaused);
         }
         
         [UnityTest]
         public IEnumerator Pause_State_Gets_Set()
         {
-            Timer timer = Timer.ScheduleDelay(10f, null);
+            Delay delay = Delay.ScheduleDelay(10f, null);
             yield return null;
 
-            timer.Pause();
+            delay.Pause();
             
-            Assert.IsTrue(timer.IsPaused);
-            timer.Stop();
+            Assert.IsTrue(delay.IsPaused);
+            delay.Stop();
         }
         
         [UnityTest]
         public IEnumerator Unpause_State_Gets_Set()
         {
-            Timer timer = Timer.ScheduleDelay(10f, null);
+            Delay delay = Delay.ScheduleDelay(10f, null);
             yield return null;
-            timer.Pause();
+            delay.Pause();
 
             yield return null;
-            timer.Unpause();
+            delay.Unpause();
             
-            Assert.IsFalse(timer.IsPaused);
-            timer.Stop();
+            Assert.IsFalse(delay.IsPaused);
+            delay.Stop();
         }
         
         [UnityTest]
         public IEnumerator Pause_State_Effects_Timer()
         {
-            Timer timer = Timer.ScheduleDelay(10f, null);
+            Delay delay = Delay.ScheduleDelay(10f, null);
 
             yield return null;
-            timer.Pause();
-            float timeBeforePause = timer.GetTimeSinceTimerStart();
+            delay.Pause();
+            float timeBeforePause = delay.GetTimeSinceTimerStart();
             
             yield return new WaitForSeconds(1f);
-            Assert.AreEqual(timeBeforePause, timer.GetTimeSinceTimerStart());
+            Assert.AreEqual(timeBeforePause, delay.GetTimeSinceTimerStart());
+        }
+
+        [UnityTest]
+        public IEnumerable Looping_Timer_Is_Not_Marked_As_Finished()
+        {
+            TimeLoop loop = TimeLoop.ScheduleLoop(1f, null);
+            
+            yield return new WaitForSeconds(2f);
+            
+            Assert.IsFalse(loop.IsFinished);
+            loop.Stop();
+        }
+        
+        [UnityTest]
+        public IEnumerable Counting_Loop_Uses_Iteration_Counter()
+        {
+            int counter = 0;
+            CountingTimeLoop loop = CountingTimeLoop.ScheduleCountingLoop(3, 0.1f, iteration => counter++);
+            
+            yield return new WaitForSeconds(1f);
+            
+            Assert.AreEqual(3, counter);
         }
     }
 }
