@@ -60,5 +60,26 @@ namespace SchloooLib.Core
         {
             return GetWorldMiddlePoint(camera).x;
         }
+
+        /// <summary>Returns the x coordinate of the screen center position.</summary>
+        /// <returns>The screen center x coordinate in screen coordinates.</returns>
+        public float GetHorizontalScreenMiddle()
+        {
+            return Screen.height / 2f;
+        }
+
+        /// <summary>Returns the y coordinate of the screen center position.</summary>
+        /// <returns>The screen center y coordinate in screen coordinates.</returns>
+        public float GetVerticalScreenMiddle()
+        {
+            return Screen.height / 2f;
+        }
+        
+        /// <summary>Returns the position coordinate of the screen's center point.</summary>
+        /// <returns>The screen center coordinates in screen coordinates.</returns>
+        public Vector2 GetScreenMiddlePoint()
+        {
+            return new Vector2(GetHorizontalScreenMiddle(), GetVerticalScreenMiddle());
+        }
     }
 }
